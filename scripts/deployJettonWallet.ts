@@ -1,6 +1,7 @@
 import { toNano } from '@ton/core';
 import { JettonWallet } from '../wrappers/JettonWallet';
 import { NetworkProvider } from '@ton/blueprint';
+import { JETTON_MINTER_ADDRESS } from '../config';
 
 export async function run(provider: NetworkProvider) {
     const senderAddress = await provider.sender().address;
@@ -9,7 +10,7 @@ export async function run(provider: NetworkProvider) {
     }
 
     //TODO: add minter address
-    const jettonWallet = provider.open(await JettonWallet.fromInit(0n,senderAddress,));
+    const jettonWallet = provider.open(await JettonWallet.fromInit(0n,senderAddress,JETTON_MINTER_ADDRESS));
 
     await jettonWallet.send(
         provider.sender(),

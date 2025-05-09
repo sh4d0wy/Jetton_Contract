@@ -89,6 +89,7 @@ This project includes several scripts to interact with the Jetton contracts:
 Update the `config.ts` file with your deployed JettonMinter contract addresses.
 ```bash
 JETTON_MINTER_ADDRESS = <YOUR_JETTON_MINTER_ADDRESS>
+JETTON_CONTENT_URI = <YOUR_JETTON_CONTENT_URI>
 ```
 
 ### Running Scripts

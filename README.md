@@ -13,6 +13,7 @@ The JettonMinter contract is responsible for:
 - Tracking the total supply
 - Managing ownership and administrative functions
 - Providing wallet addresses for token holders
+- Changing content of Token 
 
 #### Key Functions:
 

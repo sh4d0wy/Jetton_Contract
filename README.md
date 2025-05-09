@@ -86,12 +86,10 @@ This project includes several scripts to interact with the Jetton contracts:
 
 ### Configuration
 
-1. Create a `.env` file with your configuration:
-   ```
-   MNEMONIC="your wallet mnemonic phrase here"
-   ```
-
-2. Update the `config.ts` file with your deployed contract addresses.
+Update the `config.ts` file with your deployed JettonMinter contract addresses.
+```bash
+JETTON_MINTER_ADDRESS = <YOUR_JETTON_MINTER_ADDRESS>
+```
 
 ### Running Scripts
 

@@ -9,7 +9,6 @@ export async function run(provider: NetworkProvider) {
         throw new Error("Sender address is not defined");
     }
 
-    //TODO: add minter address
     const jettonWallet = provider.open(await JettonWallet.fromInit(0n,senderAddress,JETTON_MINTER_ADDRESS));
 
     await jettonWallet.send(

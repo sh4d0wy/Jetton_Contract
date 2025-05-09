@@ -46,6 +46,9 @@ This project includes several scripts to interact with the Jetton contracts:
 
 - `deployJettonMinter.ts`: Deploys a new Jetton Minter contract
 - `deployJettonWallet.ts`: Deploys a new Jetton Wallet
+
+### Admin Token Operations
+
 - `mintToken.ts`: Mints new tokens
 - `changeOwner.ts`: Changes the owner of the Jetton Minter
 - `changeJettonContent.ts`: Updates the Jetton content metadata
@@ -62,7 +65,7 @@ This project includes several scripts to interact with the Jetton contracts:
 - `getMyWalletData.ts`: Gets data from the current user's wallet
 - `getOwnerWalletBalance.ts`: Gets the balance of a wallet for a specific owner
 
-### Token Operations
+### User Token Operations
 
 - `transferJetton.ts`: Transfers tokens from the user's wallet to another address
 

@@ -1,4 +1,4 @@
-import "./JettonWallet";
+import "./jetton_wallet";
 import "./messages";
 import "./constants";
 
@@ -15,23 +15,18 @@ contract JettonMinter(
     owner: Address,
     jettonContent: Cell,
     mintable: Bool
-) {
-    receive(){cashback(sender());}
-    
+) { 
     receive(msg: Mint) {
-        require(sender() == self.owner, "Incorrect sender");
-        require(self.mintable, "Mint is closed");
+        throwUnless(300, sender() == self.owner);
+        throwUnless(301, self.mintable);
 
         let ctx = context();
 
-        require(
-            ctx.value >
+        throwUnless(302, ctx.value >
             minTonsForStorage +
             msg.mintMessage.forwardTonAmount +
             ctx.readForwardFee() +
-            2 * getComputeFee(gasForTransfer, false),
-            "Insufficient gas for mint",
-        );
+            2 * getComputeFee(gasForTransfer, false));
 
         self.totalSupply += msg.mintMessage.amount;
 
@@ -42,6 +37,7 @@ contract JettonMinter(
             body: msg.mintMessage.toCell(),
             init: getJettonWalletInit(msg.receiver),
         });
+        cashback(sender());
     }
 
     receive(msg: ProvideWalletAddress) {
@@ -63,7 +59,7 @@ contract JettonMinter(
         let sender = parseStdAddress(sender().asSlice());
         let wallet = getJettonBasechainWalletByOwner(msg.sender);
 
-        require(sender.workchain == Basechain && sender.address == wallet.hash!!, "Unauthorized burn");
+        throwUnless(303, sender.workchain == Basechain && sender.address == wallet.hash!!);
 
         self.totalSupply -= msg.amount;
 
@@ -79,23 +75,23 @@ contract JettonMinter(
     }
 
     receive(msg: JettonUpdateContent) {
-        require(sender() == self.owner, "Incorrect sender");
+        throwUnless(304, sender() == self.owner);
         self.jettonContent = msg.content;
     }
 
     receive(msg: ChangeOwner) {
-        require(sender() == self.owner, "Incorrect sender");
+        throwUnless(305, sender() == self.owner);
         self.owner = msg.newOwner;
     }
 
     receive(msg: CloseMinting) {
-        require(sender() == self.owner, "Incorrect sender");
+        throwUnless(306, sender() == self.owner);
         self.mintable = false;
         cashback(sender());
     }
 
     receive(msg: ClaimTON) {
-        require(sender() == self.owner, "Incorrect sender");
+        throwUnless(307, sender() == self.owner);
         nativeReserve(minTonsForStorage, ReserveExact | ReserveBounceIfActionFail);
         message(MessageParameters {
             bounce: true,

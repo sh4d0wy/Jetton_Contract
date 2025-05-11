@@ -44,8 +44,9 @@ contract JettonWallet(
         self.balance += msg.amount;
     
         let wallet: StateInit = initOf JettonWallet(0, msg.sender, self.minter);
-      
-        if (!wallet.hasSameBasechainAddress(sender())) {
+        let walletAddress: Address = contractAddress(wallet);
+        
+        if (sender() != walletAddress) {
             require(self.minter == sender(), "Incorrect sender");
         }
 

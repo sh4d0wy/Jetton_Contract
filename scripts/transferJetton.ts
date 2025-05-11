@@ -31,7 +31,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const result = await jettonWallet.send(
         provider.sender(),
         {
-            value: toNano('0.5')
+            value: toNano('0.1')
         },
         {
             $$type: 'JettonTransfer',

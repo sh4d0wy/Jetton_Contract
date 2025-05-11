@@ -10,8 +10,8 @@ export async function run(provider: NetworkProvider, args: string[]) {
     }
     
     const destinationAddress = Address.parse(args[0]);
-    const amount = BigInt(args[1]);
-    const forwardTonAmount = args[2] ? toNano(args[2]) : toNano('0.01');
+    const amount = toNano(args[1]);
+    const forwardTonAmount = args[2] ? toNano(args[2]) : toNano('0.05');
     
     const senderAddress = await provider.sender().address;
     if (!senderAddress) {
@@ -31,11 +31,11 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const result = await jettonWallet.send(
         provider.sender(),
         {
-            value: transferFee + forwardTonAmount
+            value: toNano('0.5')
         },
         {
             $$type: 'JettonTransfer',
-            queryId: 0n,
+            queryId: 1n,
             amount: amount,
             destination: destinationAddress,
             responseDestination: senderAddress,

@@ -19,7 +19,7 @@ export async function run(provider: NetworkProvider) {
     await jettonMinter.send(
         provider.sender(),
         {
-            value: toNano('0.1'),
+            value: toNano('0.05'),
         },
         {
             $$type: 'JettonUpdateContent',

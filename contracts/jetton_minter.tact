@@ -77,11 +77,13 @@ contract JettonMinter(
     receive(msg: JettonUpdateContent) {
         throwUnless(304, sender() == self.owner);
         self.jettonContent = msg.content;
+        cashback(sender());
     }
 
     receive(msg: ChangeOwner) {
         throwUnless(305, sender() == self.owner);
         self.owner = msg.newOwner;
+        cashback(sender());
     }
 
     receive(msg: CloseMinting) {
@@ -99,6 +101,7 @@ contract JettonMinter(
             value: 0,
             mode: SendRemainingBalance,
         });
+        cashback(sender());
     }
 
     bounced(msg: bounced<JettonTransferInternal>) {

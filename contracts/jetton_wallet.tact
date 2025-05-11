@@ -12,7 +12,7 @@ contract JettonWallet(
     // Jetton Wallet
     //EQCdqSTxUDe_Vu1MpgX6XS3ak5sAiXAgJhPZJW5ADW4ZpHiP
     receive(msg: JettonTransfer) {
-        require(sender() == self.owner, "Incorrect sender");
+        throwUnless(330,sender() == self.owner);
         self.balance -= msg.amount;
         require(self.balance >= 0, "Incorrect balance after send");
         let ctx = context();
@@ -43,7 +43,7 @@ contract JettonWallet(
     receive(msg: JettonTransferInternal) {
         self.balance += msg.amount;
     
-        let wallet: StateInit = initOf JettonWallet(100000000, msg.sender, self.minter);
+        let wallet: StateInit = initOf JettonWallet(0, msg.sender, self.minter);
       
         if (!wallet.hasSameBasechainAddress(sender())) {
             require(self.minter == sender(), "Incorrect sender");
@@ -69,6 +69,7 @@ contract JettonWallet(
             });
         }
         nativeReserve(max(tonBalanceBeforeMsg, minTonsForStorage), ReserveAtMost);
+        
         if (msg.responseDestination != null && msgValue > 0) {
             message(MessageParameters {
                 to: msg.responseDestination!!,

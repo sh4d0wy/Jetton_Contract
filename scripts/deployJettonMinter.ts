@@ -19,18 +19,18 @@ export async function run(provider: NetworkProvider) {
             .endCell()
     
     const amount = toNano('1000000000');
-    const forwardAmount = toNano('0.1');
-    const totalAmount = toNano('0.1');
+    const forwardAmount = toNano('0.01');
+    const totalAmount = toNano('0.05');
     const jettonMinter = provider.open(await JettonMinter.fromInit(0n, senderAddress, cell,true));
 
     await jettonMinter.send(
         provider.sender(),
         {
-            value: totalAmount+toNano('0.05'),
+            value: totalAmount+forwardAmount,
         },
         {
             $$type: 'Mint',
-            queryId: 0n,
+            queryId: 1n,
             receiver: provider.sender().address!,
             tonAmount: totalAmount,
             mintMessage: {
@@ -38,7 +38,7 @@ export async function run(provider: NetworkProvider) {
                 queryId: 0n,
                 amount: amount,
                 sender: jettonMinter.address!,
-                responseDestination: jettonMinter.address!,
+                responseDestination: provider.sender().address!,
                 forwardTonAmount: forwardAmount,
                 forwardPayload: beginCell().storeUint(0,8).endCell().asSlice()
             }

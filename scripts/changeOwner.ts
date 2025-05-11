@@ -9,7 +9,7 @@ export async function run(provider: NetworkProvider) {
     await jettonMinter.send(
         provider.sender(),
         {
-            value: toNano('0.5')
+            value: toNano('0.05')
         },
         {
             $$type: 'ChangeOwner',

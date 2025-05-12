@@ -1,7 +1,7 @@
 import { beginCell, toNano } from '@ton/core';
 import { JettonMinter } from '../wrappers/JettonMinter';
 import { NetworkProvider } from '@ton/blueprint';
-import { JETTON_CONTENT_URI, JETTON_MINTER_ADDRESS } from '../config';
+import { buildTokenMetadataCell } from '../utils/metadataCreator';
 
 export async function run(provider: NetworkProvider) {
     const senderAddress = await provider.sender().address;
@@ -9,19 +9,22 @@ export async function run(provider: NetworkProvider) {
         throw new Error("Sender address is not defined");
     }
 
-    const content = {
-        type:1,
-        uri:JETTON_CONTENT_URI
-    }
-    const cell = beginCell()
-            .storeUint(content.type, 8)
-            .storeStringTail(content.uri) 
-            .endCell()
+    // Create onchain metadata
+    const metadata = {
+        name: "TestTokenDigiTon",
+        description: "This is a test token on the TON network",
+        symbol: "TTDTN",
+        decimals: "9",
+        image: "https://olive-fashionable-mule-815.mypinata.cloud/ipfs/bafkreidb4qrsfsbb6esz4fmvgz4tu4vvb7krsqhpedgxcz2xglw2xaqbnu"
+    };
+
+    // Create a cell containing the metadata using the proper format
+    const content = await buildTokenMetadataCell(metadata);
     
     const amount = toNano('1000000000');
     const forwardAmount = toNano('0.01');
     const totalAmount = toNano('0.05');
-    const jettonMinter = provider.open(await JettonMinter.fromInit(0n, senderAddress, cell,true));
+    const jettonMinter = provider.open(await JettonMinter.fromInit(0n, senderAddress, content, true));
 
     await jettonMinter.send(
         provider.sender(),
@@ -46,5 +49,4 @@ export async function run(provider: NetworkProvider) {
     );
 
     await provider.waitForDeploy(jettonMinter.address);
-
 }

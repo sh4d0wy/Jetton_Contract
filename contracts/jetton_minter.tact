@@ -37,7 +37,6 @@ contract JettonMinter(
             body: msg.mintMessage.toCell(),
             init: getJettonWalletInit(msg.receiver),
         });
-        cashback(sender());
     }
 
     receive(msg: ProvideWalletAddress) {

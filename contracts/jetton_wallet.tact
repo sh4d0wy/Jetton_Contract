@@ -47,7 +47,7 @@ contract JettonWallet(
         let walletAddress: Address = contractAddress(wallet);
         
         if (sender() != walletAddress) {
-            require(self.minter == sender(), "Incorrect sender");
+            throwUnless(331,self.minter == sender());
         }
 
         let ctx: Context = context();

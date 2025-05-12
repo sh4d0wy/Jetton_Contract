@@ -18,15 +18,34 @@ This directory contains scripts for interacting with the Jetton Minter and Jetto
   npx blueprint run changeOwner <new_owner_address>
   ```
 
-- **changeJettonContent.ts**: Updates the Jetton content metadata
+- **changeJettonContent.ts**: Updates a single field in the Jetton metadata onchain.
   ```bash
-  npx blueprint run changeJettonContent
+  npx blueprint run changeJettonContent <key> <value>
+  ```
+  - `<key>`: The metadata field to update (`name`, `description`, `symbol`, `decimals`, `image`)
+  - `<value>`: The new value for the field
+
+  Example:
+  ```bash
+  npx blueprint run changeJettonContent symbol "NEW"
+  npx blueprint run changeJettonContent decimals "6"
   ```
 
-- **mintToken.ts**: Mints new tokens to a specified address
+  This script will update only the specified field in the onchain metadata, leaving all other fields unchanged.
+
+- **mintToken.ts**: Mints new tokens to a specified address.
   ```bash
-  npx blueprint run mintToken
+  npx blueprint run mintToken <recipient_address> <amount>
   ```
+  - `<recipient_address>`: The address to receive the minted tokens.
+  - `<amount>`: The number of tokens to mint (in basic units).
+
+  Example:
+  ```bash
+  npx blueprint run mintToken EQBDcfsZW5DGz7mlJO9hOetx-5X6-uWiCVj20NrpnWpc01x9 1000000000
+  ```
+
+  Only the contract owner can mint new tokens. The script will deploy a JettonWallet for the recipient if needed.
 
 ### Minter Getter Functions
 

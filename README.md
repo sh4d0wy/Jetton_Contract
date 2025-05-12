@@ -13,15 +13,15 @@ This project implements the Jetton standard on TON blockchain, providing a fungi
     - [How Contracts Interact](#how-contracts-interact)
   - [Token Metadata](#token-metadata)
     - [Metadata Format](#metadata-format)
-    - [Hosting on IPFS](#hosting-on-ipfs)
   - [Deployment Guide](#deployment-guide)
     - [Prerequisites](#prerequisites)
     - [Step 1: Prepare Token Metadata](#step-1-prepare-token-metadata)
     - [Step 2: Deploy JettonMinter](#step-2-deploy-jettonminter)
-    - [Step 3: Mint Initial Supply](#step-3-mint-initial-supply)
+    - [Step 3: Verify Initial Supply](#step-3-verify-initial-supply)
   - [Contract Administration](#contract-administration)
     - [Changing Ownership](#changing-ownership)
     - [Updating Metadata](#updating-metadata)
+    - [Minting Tokens](#minting-tokens)
     - [Closing Minting](#closing-minting)
   - [User Operations](#user-operations)
     - [Checking Balances](#checking-balances)
@@ -112,7 +112,7 @@ Jetton metadata follows a standard format stored as a JSON object:
 "description": "This is a test token on the TON network",
 "symbol": "TTDTN",
 "decimals": 9,
-"image_data": "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"
+"image": "https://olive-fashionable-mule-815.mypinata.cloud/ipfs/bafkreidb4qrsfsbb6esz4fmvgz4tu4vvb7krsqhpedgxcz2xglw2xaqbnu"
 }
 ```
 
@@ -121,24 +121,7 @@ Key fields:
 - `symbol`: Short ticker symbol (usually 3-5 characters)
 - `description`: Detailed description of your token
 - `decimals`: Number of decimal places (typically 9 for TON ecosystem)
-- `image`: Base64 encoded image of token that can be converted using online image to base64 encoders
-
-### Hosting on IPFS
-
-For decentralization, we recommend hosting your metadata on IPFS:
-
-1. **Create your metadata JSON file** with the format above
-2. **Upload to IPFS** using one of these methods:
-   - [Pinata](https://pinata.cloud/) - User-friendly IPFS pinning service
-   - [NFT.Storage](https://nft.storage/) - Free storage for NFTs and tokens
-   - [Infura IPFS](https://infura.io/product/ipfs) - Enterprise IPFS solution
-
-3. **Get the IPFS CID** (Content Identifier) - This looks like: `bafkreic7rpannnli7lfoumh47zhsnrbtoqmdf66sz6alhmj74at4ml7lmy`
-
-4. **Gateway URL** (for testing) - You can view your metadata at:
-   `https://ipfs.io/ipfs/bafkreic7rpannnli7lfoumh47zhsnrbtoqmdf66sz6alhmj74at4ml7lmy`
-
-For production tokens, consider using a dedicated IPFS gateway or pinning service to ensure reliability.
+- `image`: The image url where the token logo is hosted (eg- github pages, ipfs, google drive etc.)
 
 ## Deployment Guide
 
@@ -151,19 +134,10 @@ For production tokens, consider using a dedicated IPFS gateway or pinning servic
 
 ### Step 1: Prepare Token Metadata
 
-1. Create a JSON file with your token metadata (see [Metadata Format](#metadata-format))
-
-2. Upload to IPFS using Pinata or similar service:
-   - Create an account on [Pinata](https://pinata.cloud/)
-   - Upload your JSON file
-   - Copy the CID (Content Identifier)
-
-3. Update the `config.ts` file with your IPFS URI:
-   ```typescript
-   // Example: Using a gateway URL for better accessibility
-   export const JETTON_CONTENT_URI = "https://olive-fashionable-mule-815.mypinata.cloud/ipfs/bafkreic7rpannnli7lfoumh47zhsnrbtoqmdf66sz6alhmj74at4ml7lmy";
-   ```
-
+1. Go to srcipts/deployJettonMinter.ts to find the default metadata.
+2. Update the fields according to your preferences
+3. The fields must follow the structure of [Metadata](#metadata-format)
+   
 ### Step 2: Deploy JettonMinter
 
 1. Clone the repository and install dependencies:
@@ -194,18 +168,9 @@ For production tokens, consider using a dedicated IPFS gateway or pinning servic
    export const JETTON_MINTER_ADDRESS = Address.parse("EQBDcfsZW5DGz7mlJO9hOetx-5X6-uWiCVj20NrpnWpc01x9");
    ```
 
-### Step 3: Mint Initial Supply
+### Step 3: Verify Initial Supply
 
-1. Mint tokens to your address:
-   ```bash
-   npx blueprint run mintToken
-   ```
-
-   The default script mints 1000 tokens to your address. To customize:
-   - Edit `scripts/mintToken.ts` to change the amount
-   - Or create a new script with parameters
-
-2. Verify your balance:
+1. Verify your balance:
    ```bash
    npx blueprint run getMyWalletData
    ```
@@ -226,14 +191,57 @@ This transfers administrative rights to the new address. Only the current owner 
 
 ### Updating Metadata
 
-If you need to update your token's metadata:
+The Jetton token's metadata is stored fully onchain as a dictionary cell. You can update any field of the metadata (such as `name`, `description`, `symbol`, `decimals`, or `image`) using the `changeJettonContent.ts` script.
 
-1. Create and upload the new metadata JSON to IPFS
-2. Get the new URI
-3. Run:
-   ```bash
-   npx blueprint run changeJettonContent <new_uri>
-   ```
+**How it works:**
+- The script loads the current metadata (with default values).
+- You specify the key and value you want to update as arguments.
+- The script updates the specified key in the metadata object and rebuilds the metadata cell.
+- The new cell is sent to the JettonMinter contract as an update.
+
+**Usage:**
+```bash
+npx blueprint run changeJettonContent <key> <value>
+```
+- `<key>`: The metadata field you want to update (must be one of: `name`, `description`, `symbol`, `decimals`, `image`)
+- `<value>`: The new value for the field
+
+**Example:**
+```bash
+npx blueprint run changeJettonContent name "My New Jetton Name"
+npx blueprint run changeJettonContent image "https://example.com/new-image.png"
+```
+
+**Notes:**
+- Only the contract owner can update the metadata.
+- The update is performed onchain and is visible to all users.
+- The script does not require you to provide the full metadata object—just the field you want to change.
+
+### Minting Tokens
+
+The JettonMinter contract allows the owner to mint new tokens and send them to any address.  
+Minting is performed on deployment (see `deployJettonMinter.ts`) and can also be done later using the `mintToken.ts` script.
+
+**How it works:**
+- Only the contract owner can mint new tokens.
+- The owner specifies the recipient address and the amount to mint.
+- The contract creates (mints) the specified number of tokens and sends them to the recipient's JettonWallet (deploying it if needed).
+
+**Usage:**
+```bash
+npx blueprint run mintToken <recipient_address> <amount>
+```
+- `<recipient_address>`: The address to receive the minted tokens.
+- `<amount>`: The number of tokens to mint (in basic units, e.g., 1000000000 for 1 token if decimals is 9).
+
+**Example:**
+```bash
+npx blueprint run mintToken EQBDcfsZW5DGz7mlJO9hOetx-5X6-uWiCVj20NrpnWpc01x9 1000000000
+```
+
+**Notes:**
+- The script will automatically deploy a JettonWallet for the recipient if they do not already have one.
+- Only the owner can call this function; other users will receive an error.
 
 ### Closing Minting
 

@@ -3,9 +3,10 @@ import { JettonMinter } from '../wrappers/JettonMinter';
 import { NetworkProvider } from '@ton/blueprint';
 import { JETTON_MINTER_ADDRESS } from '../config';
 
-export async function run(provider: NetworkProvider) {
+export async function run(provider: NetworkProvider,args:String[]) {
     const jettonMinter = provider.open(new JettonMinter(JETTON_MINTER_ADDRESS));
-    
+    const newOwner = args[0];
+
     await jettonMinter.send(
         provider.sender(),
         {
@@ -14,7 +15,7 @@ export async function run(provider: NetworkProvider) {
         {
             $$type: 'ChangeOwner',
             queryId: 0n,
-            newOwner: provider.sender().address!
+            newOwner: Address.parse(newOwner as string)
         }
     );
 

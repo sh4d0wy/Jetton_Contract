@@ -1,3 +1,3 @@
 import { Address } from '@ton/core';
 
-export const JETTON_MINTER_ADDRESS = Address.parse('EQAQdzAW1VP2QUnhbmgDlbFiEayz7Jbsg8rW97K-b1gC97FW');  
+export const JETTON_MINTER_ADDRESS = Address.parse('EQAPZQQxvpaMM49WL1_qLcSm3Jtynij-j7O5HLEWyTurldbC');  

@@ -1,12 +1,12 @@
-import { beginCell, toNano } from '@ton/core';
+import { Address, beginCell, toNano } from '@ton/core';
 import { JettonMinter } from '../wrappers/JettonMinter';
 import { NetworkProvider } from '@ton/blueprint';
 import { JETTON_MINTER_ADDRESS } from '../config';
 
-export async function run(provider: NetworkProvider) {
+export async function run(provider: NetworkProvider,args:String[]) {
     const jettonMinter = provider.open(new JettonMinter(JETTON_MINTER_ADDRESS));
-    
-    const amount = toNano('1000');
+    const recipientAddress = Address.parse(args[0] as string);
+    const amount = toNano(args[1] as string);
     const forwardAmount = toNano('0.1');
     const totalAmount = toNano('0.5');
 
@@ -18,14 +18,14 @@ export async function run(provider: NetworkProvider) {
         {
             $$type: 'Mint',
             queryId: 0n,
-            receiver: provider.sender().address!,
+            receiver: recipientAddress,
             tonAmount: totalAmount,
             mintMessage: {
                 $$type: 'JettonTransferInternal',
                 queryId: 0n,
                 amount: amount,
                 sender: JETTON_MINTER_ADDRESS,
-                responseDestination: JETTON_MINTER_ADDRESS,
+                responseDestination: provider.sender().address!,
                 forwardTonAmount: forwardAmount,
                 forwardPayload: beginCell().storeUint(0,8).endCell().asSlice()
             }

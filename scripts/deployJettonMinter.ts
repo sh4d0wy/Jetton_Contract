@@ -13,7 +13,7 @@ export async function run(provider: NetworkProvider) {
     const metadata = {
         name: "TestTokenDigiTon",
         description: "This is a test token on the TON network",
-        symbol: "TTDTN",
+        symbol: "TTDTN1",
         decimals: "9",
         image: "https://olive-fashionable-mule-815.mypinata.cloud/ipfs/bafkreidb4qrsfsbb6esz4fmvgz4tu4vvb7krsqhpedgxcz2xglw2xaqbnu"
     };
